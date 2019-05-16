@@ -43,7 +43,7 @@ public class LedgerController extends BaseLedgerController {
 
             WalletClientProtos.BalanceResponse.Builder balanceResponse = WalletClientProtos.BalanceResponse.newBuilder();
             balanceResponse.setCash(amount.toPlainString());
-            balanceResponse.setCurrency(request.getCurrency());
+            balanceResponse.setCurrency(Bank.SYSTEM_CURRENCY.getCurrencyCode());
             balanceResponse.setQualifiedUserName(user);
             WalletClientProtos.BalanceResponse response = balanceResponse.build();
 

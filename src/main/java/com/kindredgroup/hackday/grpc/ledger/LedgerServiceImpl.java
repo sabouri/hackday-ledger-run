@@ -1,18 +1,16 @@
 package com.kindredgroup.hackday.grpc.ledger;
 
-import com.kindredgroup.hackday.grpc.LedgererviceGrpc;
+import com.kindredgroup.hackday.grpc.LedgerServiceGrpc;
 import com.unibet.wallet.infrastructure.protobuf.WalletClientProtos;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.util.Currency;
 
 @GrpcService
-public class LedgerServiceImpl extends LedgererviceGrpc.LedgererviceImplBase {
+public class LedgerServiceImpl extends LedgerServiceGrpc.LedgerServiceImplBase {
     private final Bank bank;
-    private final static Currency bankCurrency = Currency.getInstance("SEK");
 
     @Autowired
     public LedgerServiceImpl(Bank bank) {
@@ -21,14 +19,12 @@ public class LedgerServiceImpl extends LedgererviceGrpc.LedgererviceImplBase {
 
     @Override
     public void balance(WalletClientProtos.BalanceRequest request, StreamObserver<WalletClientProtos.BalanceResponse> responseObserver) {
-        super.balance(request, responseObserver);
-
         String user = request.getQualifiedUserName();
         BigDecimal amount = bank.balance(user);
 
         WalletClientProtos.BalanceResponse.Builder balanceResponse = WalletClientProtos.BalanceResponse.newBuilder();
         balanceResponse.setCash(amount.toPlainString());
-        balanceResponse.setCurrency(bankCurrency.getCurrencyCode());
+        balanceResponse.setCurrency(Bank.SYSTEM_CURRENCY.getCurrencyCode());
         balanceResponse.setQualifiedUserName(user);
 
         responseObserver.onNext(balanceResponse.build());
@@ -37,8 +33,6 @@ public class LedgerServiceImpl extends LedgererviceGrpc.LedgererviceImplBase {
 
     @Override
     public void deposit(WalletClientProtos.DepositRequest request, StreamObserver<WalletClientProtos.DepositResponse> responseObserver) {
-        super.deposit(request, responseObserver);
-
         WalletClientProtos.DepositResponse response = deposit(request, bank);
 
         responseObserver.onNext(response);
@@ -61,8 +55,6 @@ public class LedgerServiceImpl extends LedgererviceGrpc.LedgererviceImplBase {
 
     @Override
     public void withdraw(WalletClientProtos.WithdrawRequest request, StreamObserver<WalletClientProtos.WithdrawResponse> responseObserver) {
-        super.withdraw(request, responseObserver);
-
         WalletClientProtos.WithdrawResponse response = withdraw(request, bank);
 
         responseObserver.onNext(response);
@@ -84,10 +76,10 @@ public class LedgerServiceImpl extends LedgererviceGrpc.LedgererviceImplBase {
     }
 
     public static WalletClientProtos.Balance createCachBalance(BigDecimal balanceAmount) {
-        return WalletClientProtos.Balance.newBuilder().setCash(balanceAmount.toPlainString()).setCurrency(bankCurrency.getCurrencyCode()).build();
+        return WalletClientProtos.Balance.newBuilder().setCash(balanceAmount.toPlainString()).setCurrency(Bank.SYSTEM_CURRENCY.getCurrencyCode()).build();
     }
 
     public static WalletClientProtos.AmountDistribution createCashDistribution(BigDecimal amount) {
-        return WalletClientProtos.AmountDistribution.newBuilder().setAmount(amount.toPlainString()).setMoneyType("C").setCurrency(bankCurrency.getCurrencyCode()).build();
+        return WalletClientProtos.AmountDistribution.newBuilder().setAmount(amount.toPlainString()).setMoneyType("Cash").setCurrency(Bank.SYSTEM_CURRENCY.getCurrencyCode()).build();
     }
 }

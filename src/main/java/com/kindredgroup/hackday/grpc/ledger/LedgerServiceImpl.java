@@ -19,8 +19,8 @@ public class LedgerServiceImpl extends LedgererviceGrpc.LedgererviceImplBase {
         super.deposit(request, responseObserver);
         request.getAmount();
 
-        WalletClientProtos.DepositResponse.newBuilder().setAfterBalance()
-        responseObserver.onNext();
+        //WalletClientProtos.DepositResponse.newBuilder().setAfterBalance()
+        //responseObserver.onNext();
     }
 
     @Override

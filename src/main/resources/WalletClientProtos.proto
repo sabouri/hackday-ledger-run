@@ -1,0 +1,253 @@
+option java_package = "com.unibet.wallet.infrastructure.protobuf";
+
+// -------------------------------------------------------------
+// ALL RESPONSE MESSAGES SHOULD INCLUDE AN OPTIONAL WALLET ERROR
+// TO INDICATE IF THE CALL WAS SUCCESSFUL OR NOT
+// -------------------------------------------------------------
+
+message WalletError {
+    optional int32 code = 1;
+    optional string msg = 2;
+    optional bool canRetry = 3;
+    optional string refId = 4;
+}
+
+message Attribute {
+	optional string key = 1;
+	optional string value = 2;
+}
+
+message CurrencyRate {
+	optional string source_currency_code = 1;
+	optional string target_currency_code = 2;
+	optional string rate = 3;
+}
+
+message CurrencyRateKey {
+	optional string source_currency_code = 1;
+	optional string target_currency_code = 2;
+}
+
+message BalanceRequest {
+    optional string qualifiedUserName = 1;
+    optional string currency = 2;
+    optional string support = 3;
+}
+
+message ErrorResponse {
+    optional WalletError error = 1;
+}
+
+message Balance {
+    optional string currency = 1;
+    optional string cash = 2 [ default = "0.00" ];
+    optional string restricted = 3 [ default = "0.00" ];
+    optional string bonus = 4 [ default = "0.00" ];
+    optional string credit = 5 [ default = "0.00" ];
+    optional string grantedCredit = 6 [ default = "0.00" ];
+}
+
+message BalanceResponse {
+    optional string qualifiedUserName = 1;
+    optional string currency = 2;
+    optional string cash = 3 [ default = "0.00" ];
+    optional string restricted = 4 [ default = "0.00" ];
+    optional string bonus = 5 [ default = "0.00" ];
+    optional WalletError error = 6;
+    optional CurrencyRate currencyRate = 7;
+    optional string currencyOriginal = 8;
+    optional string cashInOriginalCurrency = 9 [ default = "0.00" ];
+    optional string restrictedInOriginalCurrency = 10 [ default = "0.00" ];
+    optional string bonusInOriginalCurrency = 11 [ default = "0.00" ];
+    optional string credit = 12 [ default = "0.00" ];
+    optional string grantedCredit = 13 [ default = "0.00" ];
+    optional string creditInOriginalCurrency = 14 [ default = "0.00" ];
+    optional string grantedCreditInOriginalCurrency = 15 [ default = "0.00" ];
+}
+
+message DepositRequest {
+    optional string qualifiedUserName = 1;
+    optional int64 productId = 2;
+    optional int32 transactionType = 3;
+    optional string uniqueReference = 4;
+    optional string amount = 5;
+    optional string currency = 6;
+    optional string gameSessionId = 7;
+    repeated Attribute attributes = 8;
+    optional string support = 9;
+    optional string unibetSessionId = 10;
+}
+
+message GrantCreditRequest{
+    optional string qualifiedUserName = 1;
+    optional int64 productId = 2;
+    optional int32 transactionType = 3;
+    optional string uniqueReference = 4;
+    optional string amount = 5;
+    optional string gameSessionId = 6;
+    repeated Attribute attributes = 7;
+    optional string sharedSecret = 8;
+}
+
+message RevokeCreditRequest{
+    optional string qualifiedUserName = 1;
+    optional int64 productId = 2;
+    optional int32 transactionType = 3;
+    optional string uniqueReference = 4;
+    optional string amount = 5;
+    optional string gameSessionId = 6;
+    repeated Attribute attributes = 7;
+    optional string sharedSecret = 8;
+}
+
+message AmountDistribution {
+    optional string moneyType = 1;
+    optional string amount = 2;
+    optional string currency = 5;
+}
+
+message DepositResponse {
+    optional bool approved = 1 [ default = true ];
+    repeated AmountDistribution distribution = 2;
+    optional WithdrawResponse relatedWithdrawal = 3;
+    optional WalletError error = 4;
+    optional Balance afterBalance = 5;
+}
+
+message GrantCreditResponse {
+    optional bool approved = 1 [ default = true ];
+    repeated AmountDistribution distribution = 2;
+    optional WalletError error = 3;
+    optional Balance afterBalance = 4;
+}
+
+message RevokeCreditResponse {
+    optional bool approved = 1 [ default = true ];
+    repeated AmountDistribution distribution = 2;
+    optional WalletError error = 3;
+    optional Balance afterBalance = 4;
+}
+
+message WithdrawRequest {
+    optional string qualifiedUserName = 1;
+    optional int64 productId = 2;
+    optional int32 transactionType = 3;
+    optional string uniqueReference = 4;
+    optional string amount = 5;
+    optional string currency = 6;
+    optional string gameSessionId = 7;
+    repeated Attribute attributes = 8;
+    optional string fundingStrategy = 9;
+    optional string support = 10;
+    optional string unibetSessionId = 11;
+}
+
+message WithdrawResponse {
+    optional bool approved = 1 [ default = true ];
+    repeated AmountDistribution distribution = 2;
+    optional WalletError error = 3;
+    optional Balance afterBalance = 4;
+}
+
+message CorrectionRequest {
+    optional string qualifiedUserName = 1;
+    optional int64 productId = 2;
+    optional int32 transactionType = 3;
+    optional string uniqueReference = 4;
+    optional string amount = 5;
+    optional string currency = 6;
+    optional string gameSessionId = 7;
+    repeated Attribute attributes = 8;
+    optional string support = 9;
+    optional string unibetSessionId = 10;
+}
+
+message CorrectionResponse {
+    optional bool approved = 1 [ default = true ];
+    repeated AmountDistribution distribution = 2;
+    optional WalletError error = 3;
+    optional Balance afterBalance = 4;
+}
+
+message SwitchCurrencyRequest {
+	optional string qualifiedUserName = 1;
+	optional string currency = 2;
+	optional string uniqueReference = 3;
+	repeated Attribute attributes = 4;
+	optional int64 productId = 5 [ default = 0 ];
+	optional string support = 6;
+}
+
+message SwitchCurrencyResponse {
+    optional bool approved = 1 [ default = true ];
+    optional WalletError error = 2;
+    optional Balance afterBalance = 3;
+}
+
+message ReverseTransactionRequest {
+	optional string qualifiedUserName = 1;
+	required int64 productId = 2;
+	required int32 transactionType = 3;
+	required string oldUniqueReference = 4;
+	required string uniqueReference = 5;
+	repeated Attribute attributes = 6;
+	optional bool reserveIfNotFound = 7;
+	optional string support = 8;
+    optional string unibetSessionId = 9;
+}
+
+message ReverseTransactionResponse {
+    optional bool approved = 1 [ default = true ];
+    optional WalletError error = 2;
+    optional Balance afterBalance = 3;
+}
+
+message ReserveIdRequest {
+	required int64 productId = 1;
+	required string uniqueReference = 2;
+	optional string qualifiedUserName = 3;
+}
+
+message ReserveIdResponse {
+    optional bool approved = 1 [ default = true ];
+    optional WalletError error = 2;
+}
+
+message ConvertRequest {
+    optional string qualifiedUserName = 1;
+    optional int64 productId = 2;
+    optional int32 transactionType = 3;
+    optional string uniqueReference = 4;
+    optional string amount = 5;
+    optional string fromType = 6;
+    optional string toType = 7;
+    optional string gameSessionId = 8;
+    repeated Attribute attributes = 9;
+    optional string support = 10;
+}
+
+message ConvertResponse {
+    optional bool approved = 1 [ default = true ];
+    optional WalletError error = 2;
+    optional Balance afterBalance = 3;
+}
+
+message CurrencyRateKeyRequest {
+	repeated CurrencyRateKey rates = 1;
+}
+
+message AllAvailableCurrencyRateKeysRequest {
+}
+
+message CurrencyRateResponse {
+	repeated CurrencyRate rates = 1;
+	optional WalletError error = 2;
+}
+
+message IdempotentMessage{
+    optional string username = 1;
+    optional bool approved = 2;
+    optional string messageClass = 3;
+    optional bytes message = 4;
+}
+

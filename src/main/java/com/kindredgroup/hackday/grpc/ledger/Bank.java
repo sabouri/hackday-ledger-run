@@ -6,5 +6,4 @@ public interface Bank {
     BigDecimal balance(String qualifiedUsername);
     BigDecimal deposit(String qualifiedUsername, BigDecimal amount);
     BigDecimal withdraw(String qualifiedUsername, BigDecimal amount);
-
 }

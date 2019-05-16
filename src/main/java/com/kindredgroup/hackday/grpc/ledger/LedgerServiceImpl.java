@@ -39,6 +39,13 @@ public class LedgerServiceImpl extends LedgererviceGrpc.LedgererviceImplBase {
     public void deposit(WalletClientProtos.DepositRequest request, StreamObserver<WalletClientProtos.DepositResponse> responseObserver) {
         super.deposit(request, responseObserver);
 
+        WalletClientProtos.DepositResponse response = deposit(request, bank);
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    public static WalletClientProtos.DepositResponse deposit(WalletClientProtos.DepositRequest request, Bank bank) {
         String user = request.getQualifiedUserName();
         BigDecimal amount = new BigDecimal(request.getAmount());
 
@@ -49,14 +56,20 @@ public class LedgerServiceImpl extends LedgererviceGrpc.LedgererviceImplBase {
         builder.setApproved(true);
         builder.addDistribution(createCashDistribution(amount));
 
-        responseObserver.onNext(builder.build());
-        responseObserver.onCompleted();
+        return builder.build();
     }
 
     @Override
     public void withdraw(WalletClientProtos.WithdrawRequest request, StreamObserver<WalletClientProtos.WithdrawResponse> responseObserver) {
         super.withdraw(request, responseObserver);
 
+        WalletClientProtos.WithdrawResponse response = withdraw(request, bank);
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    public static WalletClientProtos.WithdrawResponse withdraw(WalletClientProtos.WithdrawRequest request, Bank bank) {
         String user = request.getQualifiedUserName();
         BigDecimal amount = new BigDecimal(request.getAmount());
 
@@ -67,15 +80,14 @@ public class LedgerServiceImpl extends LedgererviceGrpc.LedgererviceImplBase {
         builder.setApproved(true);
         builder.addDistribution(createCashDistribution(amount));
 
-        responseObserver.onNext(builder.build());
-        responseObserver.onCompleted();
+        return builder.build();
     }
 
-    private static WalletClientProtos.Balance createCachBalance(BigDecimal balanceAmount) {
+    public static WalletClientProtos.Balance createCachBalance(BigDecimal balanceAmount) {
         return WalletClientProtos.Balance.newBuilder().setCash(balanceAmount.toPlainString()).setCurrency(bankCurrency.getCurrencyCode()).build();
     }
 
-    private static WalletClientProtos.AmountDistribution createCashDistribution(BigDecimal amount) {
+    public static WalletClientProtos.AmountDistribution createCashDistribution(BigDecimal amount) {
         return WalletClientProtos.AmountDistribution.newBuilder().setAmount(amount.toPlainString()).setMoneyType("C").setCurrency(bankCurrency.getCurrencyCode()).build();
     }
 }

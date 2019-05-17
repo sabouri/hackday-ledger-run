@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rest-deployment
+  labels:
+    app: rest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rest
+  template:
+    metadata:
+      labels:
+        app: rest
+    spec:
+      containers:
+        - name: rest
+          image: kindred/ts/hackday/ledger:1.0
+          resources:
+            limits:
+              memory: 3Gi
+              cpu: 4
+          env:
+            - name: JAVA_OPTS
+              value: -Xmx2500m
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://192.168.99.1:5432/hackday-grpc
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            periodSeconds: 5

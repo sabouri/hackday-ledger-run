@@ -3,6 +3,6 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://10.42.0.1:5432/hackday-grpc
-    username: hackday-gcs
-    password: Kupolmutter
+    url: jdbc:postgresql://10.65.128.3:5432/ledger
+    username: ledger
+    password: ledger

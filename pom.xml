@@ -62,7 +62,6 @@
                     <finalName>${project.name}</finalName>
                 </configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 

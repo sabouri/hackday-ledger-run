@@ -1,4 +1,3 @@
 FROM openjdk:11-jdk
-ARG JAR_FILE
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT java ${JAVA_OPTS} -jar /app.jar
+COPY target/ledger-*.jar app.jar
+ENTRYPOINT java -Dserver.port=${PORT} -jar /app.jar

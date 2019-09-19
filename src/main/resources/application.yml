@@ -10,3 +10,5 @@ spring:
       data-source-properties:
         socketFactory: "com.google.cloud.sql.postgres.SocketFactory"
         cloudSqlInstance: "hackday-ledger:europe-west1:ledger-db"
+      maximum-pool-size: 5
+      minimum-idle: 5

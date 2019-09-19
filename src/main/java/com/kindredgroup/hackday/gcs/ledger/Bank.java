@@ -1,4 +1,4 @@
-package com.kindredgroup.hackday.grpc.ledger;
+package com.kindredgroup.hackday.gcs.ledger;
 
 import java.math.BigDecimal;
 import java.util.Currency;

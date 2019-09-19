@@ -1,4 +1,4 @@
-package com.kindredgroup.hackday.grpc.ledger;
+package com.kindredgroup.hackday.gcs.ledger;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

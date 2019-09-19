@@ -1,7 +1,7 @@
-package com.kindredgroup.hackday.grpc.ledger.bank;
+package com.kindredgroup.hackday.gcs.ledger.bank;
 
-import com.kindredgroup.hackday.grpc.ledger.Bank;
-import com.kindredgroup.hackday.grpc.ledger.LedgerApplicationTests;
+import com.kindredgroup.hackday.gcs.ledger.Bank;
+import com.kindredgroup.hackday.gcs.ledger.LedgerApplicationTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

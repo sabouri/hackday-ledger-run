@@ -1,4 +1,4 @@
-package com.kindredgroup.hackday.grpc.ledger.bank.model;
+package com.kindredgroup.hackday.gcs.ledger.bank.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

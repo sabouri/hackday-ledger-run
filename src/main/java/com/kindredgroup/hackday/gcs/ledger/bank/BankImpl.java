@@ -1,8 +1,9 @@
-package com.kindredgroup.hackday.grpc.ledger.bank;
+package com.kindredgroup.hackday.gcs.ledger.bank;
 
-import com.kindredgroup.hackday.grpc.ledger.Bank;
-import com.kindredgroup.hackday.grpc.ledger.bank.model.AccountEntity;
-import com.kindredgroup.hackday.grpc.ledger.bank.model.AccountRepository;
+import com.kindredgroup.hackday.gcs.ledger.Bank;
+import com.kindredgroup.hackday.gcs.ledger.bank.model.AccountEntity;
+import com.kindredgroup.hackday.gcs.ledger.bank.model.AccountRepository;
+import com.kindredgroup.hackday.gcs.ledger.exceptions.InsufficientFundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -62,7 +63,7 @@ public class BankImpl implements Bank {
 
         BigDecimal balanceAgain = doTransaction(qualifiedUsername, amount);
         if (balanceAgain == null) {
-            throw new RuntimeException("Not enough money.");
+            throw new InsufficientFundException("Not enough money.");
         }
         return balanceAgain;
     }

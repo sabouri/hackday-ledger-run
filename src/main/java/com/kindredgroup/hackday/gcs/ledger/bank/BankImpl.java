@@ -5,6 +5,7 @@ import com.kindredgroup.hackday.gcs.ledger.bank.model.AccountEntity;
 import com.kindredgroup.hackday.gcs.ledger.bank.model.AccountRepository;
 import com.kindredgroup.hackday.gcs.ledger.exceptions.InsufficientFundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -82,9 +83,11 @@ public class BankImpl implements Bank {
         accountEntity.setQualifiedUsername(qualifiedUsername);
         accountEntity.setBalance(BigDecimal.valueOf(1_000_000));
 
-        transactionTemplate.execute(transactionStatus -> {
-            entityManager.persist(accountEntity);
-            return null;
-        });
+        try {
+            transactionTemplate.execute(transactionStatus -> {
+                entityManager.persist(accountEntity);
+                return null;
+            });
+        } catch (DataIntegrityViolationException ignored) { }
     }
 }

@@ -2,6 +2,7 @@ package com.kindredgroup.hackday.gcs.ledger.bank;
 
 import com.kindredgroup.hackday.gcs.ledger.Bank;
 import com.kindredgroup.hackday.gcs.ledger.LedgerApplicationTests;
+import com.kindredgroup.hackday.gcs.ledger.exceptions.InsufficientFundException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -73,7 +74,7 @@ public class BankImplTest extends LedgerApplicationTests {
         assertEquals(oldBalance.subtract(amount), newBalance);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = InsufficientFundException.class)
     public void bigWithdrawIsRejected() {
         String qualifiedUsername = UUID.randomUUID().toString();
         BigDecimal balance = bank.balance(qualifiedUsername);
